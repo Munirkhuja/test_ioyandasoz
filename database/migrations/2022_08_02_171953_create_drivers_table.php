@@ -17,12 +17,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users');
             $table->string('first_name',100);
-            $table->string('last_name',100)->after('first_name');
-            $table->double('longitude', 10, 6)->nullable()->after('last_name');
-            $table->double('latitude', 10, 6)->nullable()->after('longitude');
+            $table->string('last_name',100);
+            $table->double('longitude', 10, 6)->nullable();
+            $table->double('latitude', 10, 6)->nullable();
             $table->integer('balance')->default(0);
             $table->tinyInteger('rating')->default(0);
-            $table->enum('status',['active','inactive']);
+            $table->enum('status',['active','inactive'])->default('active');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -177,6 +177,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+
     ],
 
     /*
@@ -194,4 +195,6 @@ return [
         // ...
     ])->toArray(),
 
+    'client_id'=>env('OAUTH_PWD_GRANT_CLIENT_ID'),
+    'client_secret'=>env('OAUTH_PWD_GRANT_CLIENT_SECRET'),
 ];

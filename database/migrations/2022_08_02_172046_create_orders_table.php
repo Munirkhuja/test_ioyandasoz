@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('driver_id')->nullable()->constrained('users');
             $table->foreignId('client_id')->nullable()->constrained('users');
-            $table->double('longitude', 10, 6)->nullable()->after('order_id');
-            $table->double('latitude', 10, 6)->nullable()->after('longitude');
+            $table->double('longitude', 10, 6)->nullable();
+            $table->double('latitude', 10, 6)->nullable();
             $table->string('status',50)->default('entry');
             $table->tinyInteger('amount')->unsigned();
             $table->timestamps();
