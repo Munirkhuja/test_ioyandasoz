@@ -9,6 +9,7 @@ use App\Http\Requests\Api\v1\Auth\OauthRefreshTokenRequest;
 use App\Traits\IssueTokenTrait;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -24,21 +25,49 @@ class LoginController extends Controller
         ];
     }
 
+    /**
+     * @OA\Post(
+     * path="/api/login",
+     *   tags={"login"},
+     *   summary="login",
+     *   security={{"passport": {}}},
+     *   operationId="login",
+     *
+     *  @OA\Parameter(
+     *      name="login",
+     *      in="form",
+     *      required=true,
+     *      @OA\Schema(
+     *           type="string"
+     *      )
+     *   ),
+     *   @OA\Parameter(
+     *      name="password",
+     *      in="form",
+     *      required=true,
+     *      @OA\Schema(
+     *           type="string"
+     *      )
+     *   ),
+     *   @OA\Response(
+     *      response=200,
+     *       description="Success",
+     *      @OA\MediaType(
+     *           mediaType="application/json",
+     *      )
+     *   )
+     *)
+     **/
     public function login(LoginRequest $request)
     {
-        $phone = $request->input('phone');
+        $login = $request->input('login');
         $password = $request->input('password');
-        $user = User::where('phone', $phone)->first();
+        $user = User::where('login', $login)->first();
         if ($user) {
-            $revoked=$this->revokedToken($user->id);
-            if (!$revoked){
-                return response()->json([
-                    'message' => __('auth.failed'),
-                ], 500);
-            }
+            $this->revokedToken($user->id);
         }
         $this->arrayparam['grant_type'] = 'password';
-        $this->arrayparam['username'] = $phone;
+        $this->arrayparam['username'] = $login;
         $this->arrayparam['password'] = $password;
         $this->arrayparam['scope'] = '';
         return $this->issueToken($this->arrayparam);
@@ -55,19 +84,14 @@ class LoginController extends Controller
 
     private function revokedToken($user_id)
     {
-        try{
-            $oat=DB::table('oauth_access_tokens')
-                ->where('user_id', $user_id)->where('revoked',false)->pluck('id')->toArray();
-            if($oat&&count($oat)>0){
-                DB::table('oauth_access_tokens')
-                    ->whereIn('id', $oat)
-                    ->update([
-                        'revoked' => true
-                    ]);
-            }
-            return true;
-        }catch (\Exception $exception){
-            return false;
+        $oat=DB::table('oauth_access_tokens')
+            ->where('user_id', $user_id)->where('revoked',false)->pluck('id')->toArray();
+        if($oat&&count($oat)>0){
+            DB::table('oauth_access_tokens')
+                ->whereIn('id', $oat)
+                ->update([
+                    'revoked' => true
+                ]);
         }
     }
 }

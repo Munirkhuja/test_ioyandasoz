@@ -8,9 +8,14 @@ trait IssueTokenTrait
 
     public function issueToken(array $arrayparam)
     {
+        if ($arrayparam['grant_type']=='refresh_token'){
+            $url=route('passport.token.refresh_token');
+        }else{
+            $url=route('passport.token');
+        }
         $http = new \GuzzleHttp\Client;
         try {
-            $response = $http->post(route('passport.token'), [
+            $response = $http->post($url, [
                 'form_params' => $arrayparam,
             ]);
             $tokens = json_decode((string)$response->getBody(), true);

@@ -13,15 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('profits', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('driver_id')->nullable()->constrained('users');
-            $table->foreignId('client_id')->nullable()->constrained('users');
-            $table->double('longitude', 10, 6)->nullable();
-            $table->double('latitude', 10, 6)->nullable();
-            $table->string('status',50)->default('entry');
+            $table->foreignId('driver_id')->constrained('users');
+            $table->foreignId('order_id')->constrained('orders');
             $table->integer('amount')->unsigned();
-            $table->timestamps();
         });
     }
 
@@ -32,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('profits');
     }
 };

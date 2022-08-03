@@ -14,6 +14,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('login', [\App\Http\Controllers\Api\v1\Auth\LoginController::class,'login']);
+
+
+Route::group([
+    'middleware' => ['auth:api'],
+], function () {
+    Route::post('logout', [\App\Http\Controllers\Api\v1\Auth\LogoutController::class,'logout']);
+    Route::post('refresh_token', [\App\Http\Controllers\Api\v1\Auth\LoginController::class,'refreshToken']);
+
+    Route::post('driver/store', [\App\Http\Controllers\Api\v1\DriverController::class,'store']);
+
+    Route::get('order/assigned_driver', [\App\Http\Controllers\Api\v1\OrderController::class,'all_driver_assigned']);
+    Route::get('order/assigned_driver/{id}', [\App\Http\Controllers\Api\v1\OrderController::class,'driver_assigned']);
+
+    Route::get('order/completed/{id}', [\App\Http\Controllers\Api\v1\OrderController::class,'completed']);
+
 });

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\v1\DriverRegisterRequest;
 use App\Models\Driver;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class DriverController extends Controller
 {
@@ -27,6 +26,7 @@ class DriverController extends Controller
             Driver::updateOrCreate([
                 'user_id' =>$request->input('user_id'),
             ],[
+                'user_id' =>$request->input('user_id'),
                 'first_name' =>$request->input('first_name'),
                 'last_name' =>$request->input('last_name'),
             ]);
