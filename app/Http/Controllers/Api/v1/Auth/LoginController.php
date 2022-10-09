@@ -24,7 +24,6 @@ class LoginController extends Controller
             'client_secret' => config('app.client_secret')
         ];
     }
-
     /**
      * @OA\Post(
      * path="/api/login",
@@ -35,7 +34,7 @@ class LoginController extends Controller
      *
      *  @OA\Parameter(
      *      name="login",
-     *      in="form",
+     *      in="query",
      *      required=true,
      *      @OA\Schema(
      *           type="string"
@@ -43,7 +42,7 @@ class LoginController extends Controller
      *   ),
      *   @OA\Parameter(
      *      name="password",
-     *      in="form",
+     *      in="query",
      *      required=true,
      *      @OA\Schema(
      *           type="string"
